@@ -13,6 +13,8 @@ class Assignment {
 
   final String title;
 
+  final String AssignmentID;
+
   Assignment(
     this.deadline,
     this.description,
@@ -20,6 +22,7 @@ class Assignment {
     this.subjectCode,
     this.submitLink,
     this.title,
+    this.AssignmentID,
   );
 
   factory Assignment.fromJson(dynamic json) {
@@ -30,6 +33,7 @@ class Assignment {
       json['subjectCode'],
       json['submitLink'],
       json['title'],
+      json['assignmentID'],
     );
   }
 }

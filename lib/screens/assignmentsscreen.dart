@@ -56,7 +56,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                     itemBuilder: (context, index) {
                       if (index >= currentAssignments.length) return null;
                      
-                        return AssignmentCard(assignment: currentAssignments[index],);
+                        return AssignmentCard(assignment: currentAssignments[index],classcode: widget.classcode,);
                       
                     },
                   );
