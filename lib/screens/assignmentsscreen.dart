@@ -5,7 +5,8 @@ import 'package:crportal/screens/addassignment.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentsScreen extends StatefulWidget {
-  AssignmentsScreen({Key key}) : super(key: key);
+  final String classcode;
+  AssignmentsScreen({Key key, this.classcode}) : super(key: key);
 
   @override
   _AssignmentsScreenState createState() => _AssignmentsScreenState();
@@ -18,7 +19,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
       body: StreamBuilder<QuerySnapshot>(
               stream: Firestore.instance
                   .collection('classCodes')
-                  .document('CS2B')
+                  .document(widget.classcode)
                   .collection("assignments")
                   .snapshots(),
               builder: (context, snapshot) {
@@ -49,7 +50,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                       ),
                     );
                   currentAssignments
-                      .sort((a, b) => -a.deadline.compareTo(b.deadline));
+                      .sort((a, b) => a.deadline.compareTo(b.deadline));
                   return ListView.builder(
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
@@ -72,7 +73,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
         onPressed: (){
 Navigator.of(context).push(new MaterialPageRoute<Null>(
       builder: (BuildContext context) {
-        return new AddAssignment();
+        return new AddAssignment(classcode: widget.classcode,);
       },
     fullscreenDialog: true
   ));

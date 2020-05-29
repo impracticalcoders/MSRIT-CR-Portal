@@ -1,7 +1,11 @@
+import 'package:crportal/services/newassignmentbloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AddAssignment extends StatefulWidget {
-  AddAssignment({Key key}) : super(key: key);
+ final String classcode;
+  AddAssignment({Key key,this.classcode}) : super(key: key);
 
   @override
   _AddAssignmentState createState() => _AddAssignmentState();
@@ -40,6 +44,7 @@ class _AddAssignmentState extends State<AddAssignment> {
     );
   }
 
+
   @override
   void initState() {
     super.initState();
@@ -51,7 +56,61 @@ class _AddAssignmentState extends State<AddAssignment> {
     this._submissionlinkcontroller=new TextEditingController();
   }
 
-  Widget _entryField(String title, {TextEditingController controllervar}) {
+
+    onPressRegister() {
+    if (!_formKey.currentState.validate()) {
+    } else {
+      setState(() {
+        this.isLoading = true;
+      });
+      addAssignmentToDB(
+              _titlecontroller?.text ?? "Untitled",
+              _subjectcodecontroller?.text ?? "NESC",
+              _descriptioncontroller?.text ?? "Description",
+              finaldate??DateTime.now(),
+              _submissionlinkcontroller?.text ?? "submissionlink",
+              _moredetailslinkcontroller?.text??"more details",
+              widget.classcode??"NA")
+          .then((statusCode) {
+        setState(() {
+          this.isLoading = false;
+        });
+        switch (statusCode) {
+          case 1:
+            print('Added');
+            Fluttertoast.showToast(
+                msg: "Assignment Added",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            Navigator.pop(context);
+            break;
+          case 2:
+            print('check your internet connection');
+            Fluttertoast.showToast(
+                msg: "Check your Internet Connection",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            break;
+          case 3:
+            print('please try again later');
+            Fluttertoast.showToast(
+                msg: "Please try again later",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                textColor: Colors.white,
+                fontSize: 16.0);
+            break;
+        }
+      });
+    }
+  }
+
+
+  Widget _entryField(String title, {TextEditingController controllervar,bool isRequired=true}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -66,7 +125,7 @@ class _AddAssignmentState extends State<AddAssignment> {
           ),
           TextFormField(
               validator: (value) {
-                if (value.isEmpty) {
+                if (isRequired&&value.isEmpty) {
                   return 'Please fill in this field';
                 }
                 return null;
@@ -139,20 +198,20 @@ class _AddAssignmentState extends State<AddAssignment> {
   }
 
   Widget _formfieldswidgets() {
-    return 
+    return Form(key: _formKey,child: 
     ListView(
       children: <Widget>[
         _entryField("Title", controllervar: _titlecontroller),
-        _entryField("Subject Code", controllervar: _subjectcodecontroller),
+        _entryField("Subject Code", controllervar: _subjectcodecontroller,isRequired: false),
         _deadlineSelector(),
         _descriptionField("Description", controllervar: _descriptioncontroller),
         
         _entryField("Attachments URL",
-            controllervar: _moredetailslinkcontroller),
+            controllervar: _moredetailslinkcontroller,isRequired: false),
         _entryField("Submission Link",
-            controllervar: _submissionlinkcontroller),
+            controllervar: _submissionlinkcontroller,isRequired: false),
       ],
-    physics: BouncingScrollPhysics(),);
+    physics: BouncingScrollPhysics(),));
   }
 
   @override
@@ -162,8 +221,13 @@ class _AddAssignmentState extends State<AddAssignment> {
         title: Text('New Assignment'),
         actions: <Widget>[
           FlatButton(
-            child: Text("ADD"),
-            onPressed: () {},
+             child: isLoading
+            ? CupertinoActivityIndicator()
+            : Text(
+                'ADD',
+                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
+              ),
+            onPressed: () {onPressRegister();},
           )
         ],
       ),

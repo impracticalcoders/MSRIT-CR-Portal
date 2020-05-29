@@ -23,7 +23,7 @@ Future<int> addAssignmentToDB(String title,String subjcode,String description,Da
     'subjectCode':subjcode,
   });
   
-  await Firestore.instance.collection('classCode').document('CS2B').collection('assignment').document(assignmentId).setData(assignmentDetails).catchError((onError){statusCode =3;});
+  await Firestore.instance.collection('classCodes').document(classcode).collection('assignments').document(assignmentId).setData(assignmentDetails).catchError((onError){statusCode =3;});
 
   return statusCode;
 }

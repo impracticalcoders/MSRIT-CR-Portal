@@ -15,6 +15,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMixin {
     TabController _tabController;
     String branch=' ',sem=' ',sec=' ';
+    String classcode='NA';
      @override
   void initState() {
     _tabController = new TabController(length: 3, vsync: this);
@@ -31,6 +32,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
         this.branch = branch;
         this.sem=sem;
         this.sec=sec;
+        this.classcode=branch+sem+sec;
       });
   }
   
@@ -82,7 +84,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
               physics: BouncingScrollPhysics(),
               children: [
                 NoticesScreen(),
-                AssignmentsScreen(),
+                AssignmentsScreen(classcode: classcode,),
                 TestsScreen()
               ],
               controller: _tabController,
