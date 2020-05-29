@@ -2,6 +2,7 @@ import 'package:crportal/services/newassignmentbloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class AddAssignment extends StatefulWidget {
  final String classcode;
@@ -36,14 +37,18 @@ class _AddAssignmentState extends State<AddAssignment> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2019),
-      lastDate: DateTime(2022),
-      initialEntryMode: DatePickerEntryMode.input,
+      lastDate: DateTime(2025),
+      initialEntryMode: DatePickerEntryMode.calendar,
       builder: (BuildContext context, Widget child) {
         return child;
       },
     );
   }
 
+  String _formatDate(DateTime date) {
+    final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
+    return format.format(date);
+  }
 
   @override
   void initState() {
@@ -148,7 +153,7 @@ class _AddAssignmentState extends State<AddAssignment> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                'Deadline ${(finaldate == null) ? '' : ' - $finaldate '}',
+                'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
               SizedBox(

@@ -1,5 +1,6 @@
 import 'package:crportal/models/assignment.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AssignmentCard extends StatelessWidget {
   final Assignment assignment;
@@ -10,6 +11,10 @@ class AssignmentCard extends StatelessWidget {
       this.orderid = '0',
       });
 
+   String _formatDate(DateTime date) {
+    final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
+    return format.format(date);
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,7 +28,7 @@ class AssignmentCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                      assignment.deadline.toDate().toString(),),
+                      'Due '+_formatDate(assignment.deadline.toDate()),),
                   trailing: IconButton(
                     icon: Icon(Icons.arrow_forward_ios),
                     onPressed: () {
