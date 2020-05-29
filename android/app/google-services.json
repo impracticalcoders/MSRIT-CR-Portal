@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "555332370217",
+    "firebase_url": "https://aakash-knlgum.firebaseio.com",
+    "project_id": "aakash-knlgum",
+    "storage_bucket": "aakash-knlgum.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555332370217:android:d1cece01082077cbd18138",
+        "android_client_info": {
+          "package_name": "com.msritstudents.crportal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555332370217-j5sa0vh0hq9bvh6m3n9ke20bam1c4gh7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4_kH2O0uHk4wVHP2fzGqLKoaPT8J5ikI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555332370217-5r2enn1buvj8k357v70da1ceti22ihhg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
