@@ -60,6 +60,7 @@ Future<int> deleteAssignmentfromDB(String assignmentId,{String classcode}) async
    
   int statusCode =1;
   print(classcode);
+  print("Attempting Delete");
   await Firestore.instance.collection('classCodes').document(classcode).collection('assignments').document(assignmentId).delete().catchError((onError){statusCode =3;print(onError);});
 
   return statusCode;

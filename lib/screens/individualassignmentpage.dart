@@ -81,13 +81,16 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           child: Container(
-            height: 160,
+           // height: 160,
+           margin: EdgeInsets.all(5),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  
                   children: <Widget>[
+                    SizedBox(height: 5,),
                     Text(
                       "Description",
                       style: TextStyle(
@@ -96,12 +99,16 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                       ),
                       textAlign: TextAlign.left,
                     ),
+                    SizedBox(height: 12,),
                     Text(
                       "${widget.assignment.description}",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       textAlign: TextAlign.left,
+                     // maxLines: 18,
+                      
                     ),
+                    SizedBox(height: 5,),
                   ],
                 )),
           )),
@@ -116,13 +123,14 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           child: Container(
-            height: 160,
+           margin: EdgeInsets.all(10),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
+                    SizedBox(height: 5,),
                     Text(
                       "Links",
                       style: TextStyle(
@@ -131,18 +139,21 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                       ),
                       textAlign: TextAlign.left,
                     ),
+                    SizedBox(height: 10,),
                     Text(
                       "${widget.assignment.moreDetailsLink}",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
+                    SizedBox(height: 10,),
                     Text(
                       "${widget.assignment.submitLink}",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       textAlign: TextAlign.start,
                     ),
+                    SizedBox(height: 5,),
                   ],
                 )),
           )),

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditAssignment extends StatefulWidget {
   final String classcode;
@@ -28,6 +29,15 @@ class _EditAssignmentState extends State<EditAssignment> {
   final _formKey = GlobalKey<FormState>();
 
   var finaldate;
+
+  String branch;
+
+  String sec;
+
+  String sem;
+
+  String classcode;
+
 
   void callDatePicker() async {
     var order = await getDate();
@@ -57,7 +67,7 @@ class _EditAssignmentState extends State<EditAssignment> {
   @override
   void initState() {
     super.initState();
-
+  _loadClassDetails();
     this._titlecontroller =
         new TextEditingController(text: widget.assignment.title);
     this._descriptioncontroller =
@@ -73,6 +83,18 @@ class _EditAssignmentState extends State<EditAssignment> {
     });
   }
 
+  _loadClassDetails() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String branch = await pref.get("Branch");
+    String sem = await pref.get("Sem");
+    String sec = await pref.get("Sec");
+      setState(() {
+        this.branch = branch;
+        this.sem=sem;
+        this.sec=sec;
+        this.classcode=branch+sem+sec;
+      });
+  }
   onPressSubmit() {
     if (!_formKey.currentState.validate()) {
     } else {
@@ -100,6 +122,7 @@ class _EditAssignmentState extends State<EditAssignment> {
                 gravity: ToastGravity.BOTTOM,
                 textColor: Colors.white,
                 fontSize: 16.0);
+            Navigator.pop(context);
             Navigator.pop(context);
             break;
           case 2:
