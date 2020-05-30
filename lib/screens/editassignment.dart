@@ -261,7 +261,7 @@ class _EditAssignmentState extends State<EditAssignment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Assignment'),
+        title: Hero(tag:'edit${widget.assignment.AssignmentID}',child:Text('Edit Assignment')),
         actions: <Widget>[
           FlatButton(
             child: isLoading
