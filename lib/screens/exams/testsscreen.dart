@@ -1,18 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:crportal/components/assignmentcard.dart';
-import 'package:crportal/models/assignment.dart';
-import 'package:crportal/screens/addassignment.dart';
+import 'package:crportal/components/examcard.dart';
+import 'package:crportal/models/exam.dart';
+import 'package:crportal/screens/exams/addexam.dart';
 import 'package:flutter/material.dart';
 
-class AssignmentsScreen extends StatefulWidget {
+class TestsScreen extends StatefulWidget {
   final String classcode;
-  AssignmentsScreen({Key key, this.classcode}) : super(key: key);
+  TestsScreen({Key key, this.classcode}) : super(key: key);
 
   @override
-  _AssignmentsScreenState createState() => _AssignmentsScreenState();
+  _TestsScreenState createState() => _TestsScreenState();
 }
 
-class _AssignmentsScreenState extends State<AssignmentsScreen> {
+class _TestsScreenState extends State<TestsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,22 +20,22 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
           stream: Firestore.instance
               .collection('classCodes')
               .document(widget.classcode)
-              .collection("assignments")
+              .collection("tests")
               .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              List<Assignment> currentAssignments = snapshot.data.documents
-                  .map((doc) => Assignment.fromJson(doc))
+              List<Exam> currentTests = snapshot.data.documents
+                  .map((doc) => Exam.fromJson(doc))
                   .toList();
 
-              if (currentAssignments.length == 0)
+              if (currentTests.length == 0)
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Icon(
-                        Icons.assignment_turned_in,
+                        Icons.change_history,
                         size: 80,
                         color: Colors.grey,
                       ),
@@ -43,21 +43,21 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                         height: 35,
                       ),
                       Text(
-                        'No assignments pending',
+                        'No exams pending',
                         style: TextStyle(color: Colors.grey),
                       ),
                     ],
                   ),
                 );
-              currentAssignments
-                  .sort((a, b) => a.deadline.compareTo(b.deadline));
+              currentTests
+                  .sort((a, b) => a.date.compareTo(b.date));
               return ListView.builder(
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
-                  if (index >= currentAssignments.length) return null;
+                  if (index >= currentTests.length) return null;
 
-                  return AssignmentCard(
-                    assignment: currentAssignments[index],
+                  return ExamCard(
+                    exam: currentTests[index],
                     classcode: widget.classcode,
                   );
                 },
@@ -72,7 +72,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
         onPressed: () {
           Navigator.of(context).push(new MaterialPageRoute<Null>(
               builder: (BuildContext context) {
-                return new AddAssignment(
+                return new AddExam(
                   classcode: widget.classcode,
                 );
               },

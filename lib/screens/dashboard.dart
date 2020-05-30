@@ -1,6 +1,6 @@
 import 'package:crportal/screens/assignmentsscreen.dart';
 import 'package:crportal/screens/noticesscreen.dart';
-import 'package:crportal/screens/testsscreen.dart';
+import 'package:crportal/screens/exams/testsscreen.dart';
 import 'package:crportal/services/authservice.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,7 +65,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
                     text: 'Notices',
                   ),
                   new Tab(
-                    icon: new Icon(Icons.view_list),
+                    icon: new Icon(Icons.assignment),
                     text: 'Assignments',
                   ),
                   new Tab(
@@ -85,7 +85,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
               children: [
                 NoticesScreen(),
                 AssignmentsScreen(classcode: classcode,),
-                TestsScreen()
+                TestsScreen(classcode: classcode,)
               ],
               controller: _tabController,
             ),
