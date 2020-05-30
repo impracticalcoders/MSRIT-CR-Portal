@@ -50,8 +50,8 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
         centerTitle: true,
         title: Text(branch+' '+sem+' '+sec),
         actions: <Widget>[
-
-          MoreOptions()
+          
+          MoreOptions(classcode: classcode,)
         ],
          bottom: TabBar(
                 unselectedLabelColor: Colors.white,

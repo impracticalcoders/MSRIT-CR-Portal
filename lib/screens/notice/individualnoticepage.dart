@@ -230,7 +230,7 @@ class _IndividualNoticePageState extends State<IndividualNoticePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Hero(tag:widget.notice.id, child:Scaffold(
         appBar: AppBar(
           title: Text(
             "Notice Details",
@@ -264,6 +264,6 @@ class _IndividualNoticePageState extends State<IndividualNoticePage> {
         body: CustomScrollView(
           physics: BouncingScrollPhysics(),
           slivers: <Widget>[_profileCard(), _descriptionCard(), _linksCard()],
-        ));
+        )));
   }
 }

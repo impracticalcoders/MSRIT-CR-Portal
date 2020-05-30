@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MoreOptions extends StatefulWidget {
+  String classcode;
+  MoreOptions({this.classcode = ' '});
   @override
   _MoreOptionsState createState() => _MoreOptionsState();
 }
@@ -15,7 +17,7 @@ class _MoreOptionsState extends State<MoreOptions> {
       _selectedChoice = choice;
     });
   }
-  
+
   List<Choice> choices = <Choice>[
     Choice(
       title: 'About',
@@ -30,12 +32,51 @@ class _MoreOptionsState extends State<MoreOptions> {
             applicationName: "CR Portal",
             children: <Widget>[
               Text("Developed by"),
-              ListTile(contentPadding: EdgeInsets.all(1),title: Text("Aakash Pothepalli"),leading: IconButton(icon:Image.asset("assets/GitHublight.png"),),),
-              ListTile(contentPadding: EdgeInsets.all(1),title: Text("Suraj Kumar"),leading: IconButton(icon:Image.asset("assets/GitHublight.png"),),),
-            ]
-            );
+              ListTile(
+                contentPadding: EdgeInsets.all(1),
+                title: Text("Aakash Pothepalli"),
+                leading: IconButton(
+                    icon: Image.asset("assets/GitHubdark.png"),
+                    onPressed: () async {
+                      const url =
+                          'https://github.com/aakashpothepalli';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    }),
+              ),
+              ListTile(
+                contentPadding: EdgeInsets.all(1),
+                title: Text("Suraj Kumar"),
+                leading: IconButton(
+                  icon: Image.asset("assets/GitHubdark.png"),
+                   onPressed: () async {
+                      const url =
+                          'https://github.com/psk907';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'Could not launch $url';
+                      }
+                    }
+                ),
+              ),
+            ]);
       },
     ),
+    Choice(
+        title: 'Go to Website',
+        icon: Icons.open_in_browser,
+        onPressed: (context) async {
+          const url = 'https://ritassignmentstracker.tk/';
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+        }),
     Choice(
       title: 'View Source Code',
       icon: Icons.code,
