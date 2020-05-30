@@ -1,18 +1,23 @@
+import 'package:crportal/models/assignment.dart';
 import 'package:crportal/services/newassignmentbloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class AddAssignment extends StatefulWidget {
- final String classcode;
-  AddAssignment({Key key,this.classcode}) : super(key: key);
+class EditAssignment extends StatefulWidget {
+  final String classcode;
+  final String assignmentid;
+  final Assignment assignment;
+  EditAssignment({Key key, this.classcode, this.assignmentid, this.assignment})
+      : super(key: key);
 
   @override
-  _AddAssignmentState createState() => _AddAssignmentState();
+  _EditAssignmentState createState() => _EditAssignmentState();
 }
 
-class _AddAssignmentState extends State<AddAssignment> {
+class _EditAssignmentState extends State<EditAssignment> {
   bool isLoading = false;
   bool showLoading = true;
   TextEditingController _titlecontroller,
@@ -24,6 +29,15 @@ class _AddAssignmentState extends State<AddAssignment> {
   final _formKey = GlobalKey<FormState>();
 
   var finaldate;
+
+  String branch;
+
+  String sec;
+
+  String sem;
+
+  String classcode;
+
 
   void callDatePicker() async {
     var order = await getDate();
@@ -53,42 +67,62 @@ class _AddAssignmentState extends State<AddAssignment> {
   @override
   void initState() {
     super.initState();
-
-    this._titlecontroller = new TextEditingController();
-    this._descriptioncontroller = new TextEditingController();
-    this._moredetailslinkcontroller = new TextEditingController();
-    this._subjectcodecontroller = new TextEditingController();
-    this._submissionlinkcontroller=new TextEditingController();
+  _loadClassDetails();
+    this._titlecontroller =
+        new TextEditingController(text: widget.assignment.title);
+    this._descriptioncontroller =
+        new TextEditingController(text: widget.assignment.description);
+    this._moredetailslinkcontroller =
+        new TextEditingController(text: widget.assignment.moreDetailsLink);
+    this._subjectcodecontroller =
+        new TextEditingController(text: widget.assignment.subjectCode);
+    this._submissionlinkcontroller =
+        new TextEditingController(text: widget.assignment.submitLink);
+    setState(() {
+      finaldate = widget.assignment.deadline.toDate();
+    });
   }
 
-
-    onPressRegister() {
+  _loadClassDetails() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String branch = await pref.get("Branch");
+    String sem = await pref.get("Sem");
+    String sec = await pref.get("Sec");
+      setState(() {
+        this.branch = branch;
+        this.sem=sem;
+        this.sec=sec;
+        this.classcode=branch+sem+sec;
+      });
+  }
+  onPressSubmit() {
     if (!_formKey.currentState.validate()) {
     } else {
       setState(() {
         this.isLoading = true;
       });
-      addAssignmentToDB(
-              _titlecontroller?.text ?? "Untitled",
-              _subjectcodecontroller?.text ?? "NESC",
-              _descriptioncontroller?.text ?? "Description",
-              finaldate??DateTime.now(),
-              _submissionlinkcontroller?.text ?? "submissionlink",
-              _moredetailslinkcontroller?.text??"more details",
-              widget.classcode??"NA")
+      editAssignmentinDB(widget.assignmentid,
+              classcode: widget.classcode,
+              title: _titlecontroller.text,
+              deadline: finaldate,
+              description: _descriptioncontroller.text,
+              subjcode: _subjectcodecontroller?.text ?? "NESC",
+              moredetailsurl: _moredetailslinkcontroller?.text ?? '',
+              submissionurl: _submissionlinkcontroller?.text ?? '')
           .then((statusCode) {
         setState(() {
           this.isLoading = false;
         });
         switch (statusCode) {
           case 1:
-            print('Added');
+            print('Updated');
             Fluttertoast.showToast(
-                msg: "Assignment Added",
+                msg: "Details updated",
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
                 textColor: Colors.white,
                 fontSize: 16.0);
+            Navigator.pop(context);
             Navigator.pop(context);
             break;
           case 2:
@@ -114,8 +148,8 @@ class _AddAssignmentState extends State<AddAssignment> {
     }
   }
 
-
-  Widget _entryField(String title, {TextEditingController controllervar,bool isRequired=true}) {
+  Widget _entryField(String title,
+      {TextEditingController controllervar, bool isRequired = true}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -130,7 +164,7 @@ class _AddAssignmentState extends State<AddAssignment> {
           ),
           TextFormField(
               validator: (value) {
-                if (isRequired&&value.isEmpty) {
+                if (isRequired && value.isEmpty) {
                   return 'Please fill in this field';
                 }
                 return null;
@@ -146,30 +180,32 @@ class _AddAssignmentState extends State<AddAssignment> {
     );
   }
 
-  Widget _deadlineSelector(){
-   return Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              new RaisedButton(
-                onPressed: callDatePicker,
-                child: new Text(
-                  '${(finaldate == null) ? 'Set Deadline' : 'Change'}',
-                ),
-              ),
-            ],
+  Widget _deadlineSelector() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
-        );
-  } 
-  Widget _descriptionField(String title, {TextEditingController controllervar}) {
+          SizedBox(
+            height: 10,
+          ),
+          new RaisedButton(
+            onPressed: callDatePicker,
+            child: new Text(
+              '${(finaldate == null) ? 'Set Deadline' : 'Change'}',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _descriptionField(String title,
+      {TextEditingController controllervar}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -191,7 +227,6 @@ class _AddAssignmentState extends State<AddAssignment> {
               },
               keyboardType: TextInputType.multiline,
               maxLines: 18,
-              
               controller: controllervar,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -203,36 +238,44 @@ class _AddAssignmentState extends State<AddAssignment> {
   }
 
   Widget _formfieldswidgets() {
-    return Form(key: _formKey,child: 
-    ListView(
-      children: <Widget>[
-        _entryField("Title", controllervar: _titlecontroller),
-        _entryField("Subject Code", controllervar: _subjectcodecontroller,isRequired: false),
-        _deadlineSelector(),
-        _descriptionField("Description", controllervar: _descriptioncontroller),
-        
-        _entryField("Attachments URL",
-            controllervar: _moredetailslinkcontroller,isRequired: false),
-        _entryField("Submission Link",
-            controllervar: _submissionlinkcontroller,isRequired: false),
-      ],
-    physics: BouncingScrollPhysics(),));
+    return Form(
+        key: _formKey,
+        child: ListView(
+          children: <Widget>[
+            _entryField("Title", controllervar: _titlecontroller),
+            _entryField("Subject Code",
+                controllervar: _subjectcodecontroller, isRequired: false),
+            _deadlineSelector(),
+            _descriptionField("Description",
+                controllervar: _descriptioncontroller),
+            _entryField("Attachments URL",
+                controllervar: _moredetailslinkcontroller, isRequired: false),
+            _entryField("Submission Link",
+                controllervar: _submissionlinkcontroller, isRequired: false),
+          ],
+          physics: BouncingScrollPhysics(),
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Assignment'),
+        title: Text('Edit Assignment'),
         actions: <Widget>[
           FlatButton(
-             child: isLoading
-            ? CupertinoActivityIndicator()
-            : Text(
-                'ADD',
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-              ),
-            onPressed: () {onPressRegister();},
+            child: isLoading
+                ? CupertinoActivityIndicator()
+                : Text(
+                    'Update',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+            onPressed: () {
+              onPressSubmit();
+            },
           )
         ],
       ),

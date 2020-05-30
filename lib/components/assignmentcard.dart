@@ -1,15 +1,22 @@
 import 'package:crportal/models/assignment.dart';
+import 'package:crportal/screens/individualassignmentpage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class AssignmentCard extends StatelessWidget {
   final Assignment assignment;
-  final String orderid;
+  
+  final String classcode;
   
   AssignmentCard(
       {this.assignment,
-      this.orderid = '0',
+      this.classcode = 'NA',
       });
 
+   String _formatDate(DateTime date) {
+    final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
+    return format.format(date);
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,32 +30,27 @@ class AssignmentCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                      assignment.deadline.toDate().toString(),),
+                      'Due '+_formatDate(assignment.deadline.toDate()),),
                   trailing: IconButton(
                     icon: Icon(Icons.arrow_forward_ios),
                     onPressed: () {
-                     /* Navigator.push(
+                     Navigator.push(
                           context,
                           new MaterialPageRoute(
-                              builder: (context) => IndividualOrderPage(
-                                    orderData: order,
-                                    distance: dist,
-                                    user: user,
-                                    orderid: orderid,
-                                  )));*/
+                              builder: (context) => IndividualAssignmentPage(
+                                   assignment: assignment,
+                                  )));
                     },
                   ),
-                  isThreeLine: true,
+                  //isThreeLine: true,
                   onTap: () {
-                   /* Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => IndividualOrderPage(
-                                  orderData: order,
-                                  distance: dist,
-                                  user: user,
-                                  orderid: orderid,
-                                )));*/
+                   Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => IndividualAssignmentPage(
+                                   assignment: assignment,
+                                   classcode: classcode,
+                                  )));
                   },
                 )));
   }

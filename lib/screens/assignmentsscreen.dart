@@ -35,7 +35,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Icon(
-                            Icons.remove_shopping_cart,
+                            Icons.list,
                             size: 80,
                             color: Colors.grey,
                           ),
@@ -56,7 +56,7 @@ class _AssignmentsScreenState extends State<AssignmentsScreen> {
                     itemBuilder: (context, index) {
                       if (index >= currentAssignments.length) return null;
                      
-                        return AssignmentCard(assignment: currentAssignments[index],);
+                        return AssignmentCard(assignment: currentAssignments[index],classcode: widget.classcode,);
                       
                     },
                   );
