@@ -83,7 +83,7 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
       body:  TabBarView(
               physics: BouncingScrollPhysics(),
               children: [
-                NoticesScreen(),
+                NoticesScreen(classcode: classcode),
                 AssignmentsScreen(classcode: classcode,),
                 TestsScreen()
               ],
