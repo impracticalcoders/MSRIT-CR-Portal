@@ -1,3 +1,4 @@
+import 'package:crportal/components/moreoptions.dart';
 import 'package:crportal/screens/assignments/assignmentsscreen.dart';
 import 'package:crportal/screens/exams/testsscreen.dart';
 import 'package:crportal/screens/notice/noticesscreen.dart';
@@ -43,24 +44,16 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return isLoading?
-    CupertinoActivityIndicator():
+    Scaffold(body: Center(child: CupertinoActivityIndicator(),),)
+    :
     Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(branch+' '+sem+' '+sec),
-        actions: <Widget>[IconButton(
-          icon: Icon(
-            Icons.exit_to_app,
-            color: Colors.red,
-          ),
-          onPressed: () async {
-            AuthService().signOut();
-            Navigator.pushReplacement(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) => AuthService().handleAuth()));
-          },
-        ),],
+        actions: <Widget>[
+
+          MoreOptions()
+        ],
          bottom: TabBar(
                 unselectedLabelColor: Colors.white,
                 labelColor: Colors.blue[50],
