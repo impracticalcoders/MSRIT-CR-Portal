@@ -22,13 +22,18 @@ class _AddAssignmentState extends State<AddAssignment> {
       _submissionlinkcontroller;
   var _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  TimeOfDay time;
 
-  var finaldate;
+  DateTime pickeddate;
+  DateTime dayandtime;
 
   void callDatePicker() async {
     var order = await getDate();
     setState(() {
-      finaldate = order;
+      if(pickeddate!=null)
+      pickeddate = order;
+      else
+      pickeddate=DateTime.now();
     });
   }
 
@@ -39,9 +44,7 @@ class _AddAssignmentState extends State<AddAssignment> {
       firstDate: DateTime(2019),
       lastDate: DateTime(2025),
       initialEntryMode: DatePickerEntryMode.calendar,
-      builder: (BuildContext context, Widget child) {
-        return child;
-      },
+     
     );
   }
 
@@ -53,7 +56,8 @@ class _AddAssignmentState extends State<AddAssignment> {
   @override
   void initState() {
     super.initState();
-
+      this.time = TimeOfDay.now();
+    this.pickeddate = DateTime.now();
     this._titlecontroller = new TextEditingController();
     this._descriptioncontroller = new TextEditingController();
     this._moredetailslinkcontroller = new TextEditingController();
@@ -66,12 +70,20 @@ class _AddAssignmentState extends State<AddAssignment> {
     } else {
       setState(() {
         this.isLoading = true;
+
+        this.dayandtime = new DateTime(
+            this.pickeddate.year,
+            this.pickeddate.month,
+            this.pickeddate.day,
+            this.time.hour,
+            this.time.minute);
+    
       });
       addAssignmentToDB(
               _titlecontroller?.text ?? "Untitled",
               _subjectcodecontroller?.text ?? "NESC",
               _descriptioncontroller?.text ?? "Description",
-              finaldate ?? DateTime.now(),
+              dayandtime ?? DateTime.now(),
               _submissionlinkcontroller?.text ?? "submissionlink",
               _moredetailslinkcontroller?.text ?? "more details",
               widget.classcode ?? "NA")
@@ -145,6 +157,7 @@ class _AddAssignmentState extends State<AddAssignment> {
     );
   }
 
+  
   Widget _deadlineSelector() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -152,22 +165,22 @@ class _AddAssignmentState extends State<AddAssignment> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
+            'Deadline ${(dayandtime == null) ? '' : ' - ${_formatDate(dayandtime)} '}',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          new RaisedButton(
-            onPressed: callDatePicker,
-            child: new Text(
-              '${(finaldate == null) ? 'Set Deadline' : 'Change'}',
-            ),
           ),
         ],
       ),
     );
   }
+
+  _pickTime() async {
+    TimeOfDay t = await showTimePicker(context: context, initialTime: time);
+    if (t != null)
+      setState(() {
+        time = t;
+      });
+  }
+
 
   Widget _descriptionField(String title,
       {TextEditingController controllervar}) {
@@ -211,6 +224,17 @@ class _AddAssignmentState extends State<AddAssignment> {
             _entryField("Subject Code",
                 controllervar: _subjectcodecontroller, isRequired: false),
             _deadlineSelector(),
+            ListTile(
+              title: Text(
+                  "${DateFormat.EEEE("en_US").add_yMMMMd().format(pickeddate)}"),
+              trailing: Icon(Icons.calendar_today),
+              onTap: callDatePicker,
+            ),
+            ListTile(
+              title: Text("${time.format(context)}"),
+              trailing: Icon(Icons.access_time),
+              onTap: _pickTime,
+            ),
             _descriptionField("Description",
                 controllervar: _descriptioncontroller),
             _entryField("Attachments URL",
