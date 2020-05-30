@@ -24,7 +24,6 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
   bool isLoading = false;
   bool showLoading = true;
 
-  String classcode;
 
   @override
   void initState() {
@@ -33,10 +32,7 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
   }
 
   _loadClassDetails() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String _classcode = await pref.get("ClassCode");
     setState(() {
-      this.classcode = _classcode;
       this.isLoading = false;
     });
   }
@@ -60,7 +56,7 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
     });
     deleteAssignmentfromDB(
       widget.assignment.AssignmentID,
-      classcode: classcode,
+      classcode: widget.classcode,
     ).then((statusCode) {
       setState(() {
         this.isLoading = false;
@@ -294,7 +290,7 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                         new MaterialPageRoute(
                             builder: (context) => EditAssignment(
                                   assignment: widget.assignment,
-                                  classcode: classcode,
+                                  classcode: widget.classcode,
                                   assignmentid: widget.assignment.AssignmentID,
                                 )));
                   },

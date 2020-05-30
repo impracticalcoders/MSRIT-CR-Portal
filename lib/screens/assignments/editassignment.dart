@@ -19,7 +19,7 @@ class EditAssignment extends StatefulWidget {
 
 class _EditAssignmentState extends State<EditAssignment> {
   bool isLoading = false;
-  bool showLoading = true;
+  bool showLoading = false;
   TextEditingController _titlecontroller,
       _descriptioncontroller,
       _subjectcodecontroller,
@@ -30,7 +30,6 @@ class _EditAssignmentState extends State<EditAssignment> {
   DateTime pickeddate;
   TimeOfDay time;
   DateTime dayandtime;
-  String classcode;
 
 
   void callDatePicker() async {
@@ -62,7 +61,6 @@ class _EditAssignmentState extends State<EditAssignment> {
   @override
   void initState() {
     super.initState();
-  _loadClassDetails();
     this._titlecontroller =
         new TextEditingController(text: widget.assignment.title);
     this._descriptioncontroller =
@@ -79,16 +77,7 @@ class _EditAssignmentState extends State<EditAssignment> {
     });
   }  
   
-  _loadClassDetails() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String _classcode = await pref.get("ClassCode");
-      setState(() {
-        
-        this.classcode=_classcode;
-        this.isLoading = false;
-        
-      });
-  }
+  
 
   onPressSubmit() {
     if (!_formKey.currentState.validate()) {
@@ -103,7 +92,7 @@ class _EditAssignmentState extends State<EditAssignment> {
             this.time.minute);
       });
       editAssignmentinDB(widget.assignmentid,
-              classcode: classcode,
+              classcode: widget.classcode,
               title: _titlecontroller.text,
               deadline: dayandtime,
               description: _descriptioncontroller.text,

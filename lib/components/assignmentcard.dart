@@ -17,8 +17,10 @@ class AssignmentCard extends StatelessWidget {
     final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
     return format.format(date);
   }
+  
   @override
   Widget build(BuildContext context) {
+    print(this.classcode);
     return Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             child: Hero(tag:assignment.AssignmentID,child:
@@ -40,6 +42,7 @@ class AssignmentCard extends StatelessWidget {
                           new MaterialPageRoute(
                               builder: (context) => IndividualAssignmentPage(
                                    assignment: assignment,
+                                   classcode: this.classcode
                                   )));
                     },
                   ),
