@@ -6,7 +6,6 @@ Future<int> addExamToDB(String title,String subjcode,String description,DateTime
    
   int statusCode =1;
   
-  FirebaseUser user = await getUser();
 
   //create a new user
   Map<String,dynamic> examDetails = new Map();

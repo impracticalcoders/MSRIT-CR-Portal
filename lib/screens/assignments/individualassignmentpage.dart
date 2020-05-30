@@ -1,7 +1,6 @@
 import 'package:crportal/models/assignment.dart';
-import 'package:crportal/screens/editassignment.dart';
+import 'package:crportal/screens/assignments/editassignment.dart';
 import 'package:crportal/services/newassignmentbloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -81,16 +80,17 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           child: Container(
-           // height: 160,
-           margin: EdgeInsets.all(5),
+            // height: 160,
+            margin: EdgeInsets.all(5),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  
                   children: <Widget>[
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Text(
                       "Description",
                       style: TextStyle(
@@ -99,16 +99,19 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                       ),
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 12,),
+                    SizedBox(
+                      height: 12,
+                    ),
                     Text(
                       "${widget.assignment.description}",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       textAlign: TextAlign.left,
-                     // maxLines: 18,
-                      
+                      // maxLines: 18,
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                   ],
                 )),
           )),
@@ -123,14 +126,16 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           child: Container(
-           margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(10),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Text(
                       "Links",
                       style: TextStyle(
@@ -139,21 +144,27 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                       ),
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       "${widget.assignment.moreDetailsLink}",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Text(
                       "${widget.assignment.submitLink}",
                       style:
                           TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                       textAlign: TextAlign.start,
                     ),
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                   ],
                 )),
           )),
@@ -215,42 +226,47 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: widget.assignment.AssignmentID,
-      child:Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Assignment Details",
-            style: TextStyle(fontFamily: 'Archia', fontWeight: FontWeight.bold),
-          ),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                        builder: (context) => EditAssignment(
-                              assignment: widget.assignment,
-                              classcode: widget.classcode,
-                              assignmentid: widget.assignment.AssignmentID,
-                            )));
-              },
+        tag: widget.assignment.AssignmentID,
+        child: Scaffold(
+            appBar: AppBar(
+              title: Text(
+                "Assignment Details",
+                style: TextStyle(
+                    fontFamily: 'Archia', fontWeight: FontWeight.bold),
+              ),
+              centerTitle: true,
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                            builder: (context) => EditAssignment(
+                                  assignment: widget.assignment,
+                                  classcode: widget.classcode,
+                                  assignmentid: widget.assignment.AssignmentID,
+                                )));
+                  },
+                ),
+                IconButton(
+                  icon: isLoading
+                      ? CupertinoActivityIndicator()
+                      : Icon(Icons.delete_forever),
+                  onPressed: () {
+                    onPressDelete();
+                  },
+                ),
+              ],
+              elevation: 0.0,
             ),
-            IconButton(
-              icon: isLoading
-                  ? CupertinoActivityIndicator()
-                  : Icon(Icons.delete_forever),
-              onPressed: () {
-                onPressDelete();
-              },
-            ),
-          ],
-          elevation: 0.0,
-        ),
-        body: CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          slivers: <Widget>[_profileCard(), _descriptionCard(), _linksCard()],
-        )));
+            body: CustomScrollView(
+              physics: BouncingScrollPhysics(),
+              slivers: <Widget>[
+                _profileCard(),
+                _descriptionCard(),
+                _linksCard()
+              ],
+            )));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crportal/components/assignmentcard.dart';
 import 'package:crportal/models/assignment.dart';
-import 'package:crportal/screens/addassignment.dart';
+import 'package:crportal/screens/assignments/addassignment.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentsScreen extends StatefulWidget {

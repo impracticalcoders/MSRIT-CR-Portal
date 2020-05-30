@@ -1,15 +1,14 @@
-import 'package:crportal/models/assignment.dart';
-import 'package:crportal/screens/assignments/individualassignmentpage.dart';
+import 'package:crportal/models/notice.dart';
+import 'package:crportal/screens/notice/individualnoticepage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class AssignmentCard extends StatelessWidget {
-  final Assignment assignment;
-  
-  final String classcode;
-  
-  AssignmentCard(
-      {this.assignment,
+class NoticeCard extends StatelessWidget {
+  final Notice notice;
+    final String classcode;
+
+  NoticeCard(
+      {this.notice,
       this.classcode,
       });
 
@@ -21,38 +20,38 @@ class AssignmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            child: Hero(tag:assignment.AssignmentID,child:
-            Card(
+            child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0)),
                 child: ListTile(
                   title: Text(
-                    assignment.title,
+                    notice.title,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                      'Due '+_formatDate(assignment.deadline.toDate()),),
+                      'Dated : '+_formatDate(notice.date.toDate()),),
                   trailing: IconButton(
                     icon: Icon(Icons.arrow_forward_ios),
                     onPressed: () {
-                     Navigator.push(
+                       Navigator.push(
                           context,
                           new MaterialPageRoute(
-                              builder: (context) => IndividualAssignmentPage(
-                                   assignment: assignment,
+                              builder: (context) => IndividualNoticePage(
+                                   notice: notice,
+                                   classcode: classcode??"NA",
                                   )));
                     },
                   ),
-                  //isThreeLine: true,
+                  isThreeLine: true,
                   onTap: () {
-                   Navigator.push(
+                     Navigator.push(
                           context,
                           new MaterialPageRoute(
-                              builder: (context) => IndividualAssignmentPage(
-                                   assignment: assignment,
+                              builder: (context) => IndividualNoticePage(
+                                   notice: notice,
                                    classcode: classcode??"NA",
                                   )));
                   },
-                ))));
+                )));
   }
 }
