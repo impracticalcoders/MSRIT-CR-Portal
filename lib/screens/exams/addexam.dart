@@ -19,15 +19,16 @@ class _AddExamState extends State<AddExam> {
       _descriptioncontroller,
       _subjectcodecontroller,
       _moredetailslinkcontroller;
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
+  TimeOfDay time;
 
-  var finaldate;
+  DateTime pickeddate;
+  DateTime dayandtime;
 
   void callDatePicker() async {
     var order = await getDate();
     setState(() {
-      finaldate = order;
+      pickeddate = order;
     });
   }
 
@@ -35,8 +36,8 @@ class _AddExamState extends State<AddExam> {
     return showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2019),
-      lastDate: DateTime(2025),
+      firstDate: DateTime(DateTime.now().year-2),
+      lastDate: DateTime(DateTime.now().year+2),
       initialEntryMode: DatePickerEntryMode.calendar,
       builder: (BuildContext context, Widget child) {
         return child;
@@ -52,7 +53,8 @@ class _AddExamState extends State<AddExam> {
   @override
   void initState() {
     super.initState();
-
+    this.time = TimeOfDay.now();
+    this.pickeddate = DateTime.now();
     this._titlecontroller = new TextEditingController();
     this._descriptioncontroller = new TextEditingController();
     this._moredetailslinkcontroller = new TextEditingController();
@@ -64,12 +66,19 @@ class _AddExamState extends State<AddExam> {
     } else {
       setState(() {
         this.isLoading = true;
+
+        this.dayandtime = new DateTime(
+            this.pickeddate.year,
+            this.pickeddate.month,
+            this.pickeddate.day,
+            this.time.hour,
+            this.time.minute);
       });
       addExamToDB(
               _titlecontroller?.text ?? "Untitled",
               _subjectcodecontroller?.text ?? "NESC",
               _descriptioncontroller?.text ?? "Description",
-              finaldate ?? DateTime.now(),
+              dayandtime ?? DateTime.now(),
               _moredetailslinkcontroller?.text ?? "more details",
               widget.classcode ?? "NA")
           .then((statusCode) {
@@ -149,21 +158,20 @@ class _AddExamState extends State<AddExam> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
+            'Deadline ${(dayandtime == null) ? '' : ' - ${_formatDate(dayandtime)} '}',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          new RaisedButton(
-            onPressed: callDatePicker,
-            child: new Text(
-              '${(finaldate == null) ? 'Set Deadline' : 'Change'}',
-            ),
           ),
         ],
       ),
     );
+  }
+
+  _pickTime() async {
+    TimeOfDay t = await showTimePicker(context: context, initialTime: time);
+    if (t != null)
+      setState(() {
+        time = t;
+      });
   }
 
   Widget _descriptionField(String title,
@@ -208,6 +216,17 @@ class _AddExamState extends State<AddExam> {
             _entryField("Subject Code",
                 controllervar: _subjectcodecontroller, isRequired: false),
             _deadlineSelector(),
+            ListTile(
+              title: Text(
+                  "${DateFormat.EEEE("en_US").add_yMMMMd().format(pickeddate)}"),
+              trailing: Icon(Icons.calendar_today),
+              onTap: callDatePicker,
+            ),
+            ListTile(
+              title: Text("${time.format(context)}"),
+              trailing: Icon(Icons.access_time),
+              onTap: _pickTime,
+            ),
             _descriptionField("Description",
                 controllervar: _descriptioncontroller),
             _entryField("Attachments URL",
