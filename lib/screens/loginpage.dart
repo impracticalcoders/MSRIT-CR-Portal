@@ -96,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
     prefs.setString('Branch', _dept);
     prefs.setString('Sem', _sem);
     prefs.setString('Sec', _sec);
+    prefs.setString('ClassCode', _dept+_sem+_sec);
     
   }
 

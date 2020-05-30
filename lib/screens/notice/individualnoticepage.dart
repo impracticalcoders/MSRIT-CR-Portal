@@ -109,6 +109,7 @@ class _IndividualNoticePageState extends State<IndividualNoticePage> {
     ));
   }
 
+ 
   SliverToBoxAdapter _linksCard() {
     return SliverToBoxAdapter(
         child: Padding(
@@ -117,14 +118,16 @@ class _IndividualNoticePageState extends State<IndividualNoticePage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
           child: Container(
-           margin: EdgeInsets.all(10),
+            margin: EdgeInsets.all(10),
             child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    SizedBox(height: 5,),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Text(
                       "Links",
                       style: TextStyle(
@@ -133,16 +136,40 @@ class _IndividualNoticePageState extends State<IndividualNoticePage> {
                       ),
                       textAlign: TextAlign.left,
                     ),
-                    SizedBox(height: 10,),
-                    Text(
-                      "${widget.notice?.moreDetailsLink ?? ""}",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                      textAlign: TextAlign.left,
+                    SizedBox(
+                      height: 10,
                     ),
-                    SizedBox(height: 10,),
-                    
-                    SizedBox(height: 5,),
+                    (widget.notice.moreDetailsLink != "")
+                        ? ListTile(
+                            title: Text(
+                              "More Details",
+                              
+                              textAlign: TextAlign.left,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              "${widget.notice.moreDetailsLink}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                              textAlign: TextAlign.left,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.attachment),
+                              onPressed: () =>
+                                  _launchURL(widget.notice.moreDetailsLink),
+                            ))
+                        : Container(
+                            child: Text("No link attached"),
+                          ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
                   ],
                 )),
           )),

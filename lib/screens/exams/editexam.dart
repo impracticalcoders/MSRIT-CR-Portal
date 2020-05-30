@@ -25,10 +25,9 @@ class _EditExamState extends State<EditExam> {
       _subjectcodecontroller,
       _moredetailslinkcontroller;
 
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  var finaldate;
+  
 
   String branch;
 
@@ -37,12 +36,15 @@ class _EditExamState extends State<EditExam> {
   String sem;
 
   String classcode;
-
+DateTime pickeddate;
+DateTime dayandtime;
+TimeOfDay time;
 
   void callDatePicker() async {
     var order = await getDate();
+    if(order!=null)
     setState(() {
-      finaldate = order;
+      pickeddate = order;
     });
   }
 
@@ -63,8 +65,7 @@ class _EditExamState extends State<EditExam> {
     final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
     return format.format(date);
   }
-
-  @override
+@override
   void initState() {
     super.initState();
   _loadClassDetails();
@@ -77,20 +78,15 @@ class _EditExamState extends State<EditExam> {
     this._subjectcodecontroller =
         new TextEditingController(text: widget.exam.subjectCode);
     setState(() {
-      finaldate = widget.exam.date.toDate();
+      pickeddate = widget.exam.date.toDate();
+      time=TimeOfDay.fromDateTime(widget.exam.date.toDate());
     });
-  }
-
+  }  
   _loadClassDetails() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    String branch = await pref.get("Branch");
-    String sem = await pref.get("Sem");
-    String sec = await pref.get("Sec");
+    String _classcode= await pref.get("ClassCode");
       setState(() {
-        this.branch = branch;
-        this.sem=sem;
-        this.sec=sec;
-        this.classcode=branch+sem+sec;
+        this.classcode=_classcode;
       });
   }
   onPressSubmit() {
@@ -98,11 +94,17 @@ class _EditExamState extends State<EditExam> {
     } else {
       setState(() {
         this.isLoading = true;
+         this.dayandtime = new DateTime(
+            this.pickeddate.year,
+            this.pickeddate.month,
+            this.pickeddate.day,
+            this.time.hour,
+            this.time.minute);
       });
       editExaminDB(widget.examid,
               classcode: widget.classcode,
               title: _titlecontroller.text,
-              deadline: finaldate??DateTime.now(),
+              deadline: dayandtime??DateTime.now(),
               description: _descriptioncontroller.text,
               subjcode: _subjectcodecontroller?.text ?? "NESC",
               moredetailsurl: _moredetailslinkcontroller?.text ?? '',
@@ -178,30 +180,28 @@ class _EditExamState extends State<EditExam> {
     );
   }
 
-  Widget _deadlineSelector() {
+ Widget _deadlineSelector() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Text(
-            'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
+            'Date of exam/test ${(dayandtime == null) ? '' : ' - ${_formatDate(dayandtime)} '}',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          new RaisedButton(
-            onPressed: callDatePicker,
-            child: new Text(
-              '${(finaldate == null) ? 'Set Deadline' : 'Change'}',
-            ),
           ),
         ],
       ),
     );
   }
 
+  _pickTime() async {
+    TimeOfDay t = await showTimePicker(context: context, initialTime: time);
+    if (t != null)
+      setState(() {
+        time = t;
+      });
+  }
   Widget _descriptionField(String title,
       {TextEditingController controllervar}) {
     return Container(
@@ -244,6 +244,17 @@ class _EditExamState extends State<EditExam> {
             _entryField("Subject Code",
                 controllervar: _subjectcodecontroller, isRequired: false),
             _deadlineSelector(),
+            ListTile(
+              title: Text(
+                  "${DateFormat.EEEE("en_US").add_yMMMMd().format(pickeddate)}"),
+              trailing: Icon(Icons.calendar_today),
+              onTap: callDatePicker,
+            ),
+            ListTile(
+              title: Text("${time.format(context)}"),
+              trailing: Icon(Icons.access_time),
+              onTap: _pickTime,
+            ),
             _descriptionField("Description",
                 controllervar: _descriptioncontroller),
             _entryField("Attachments URL",

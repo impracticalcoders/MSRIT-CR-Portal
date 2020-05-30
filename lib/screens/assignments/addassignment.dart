@@ -20,7 +20,6 @@ class _AddAssignmentState extends State<AddAssignment> {
       _subjectcodecontroller,
       _moredetailslinkcontroller,
       _submissionlinkcontroller;
-  var _scaffoldKey = new GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   TimeOfDay time;
 
@@ -29,12 +28,10 @@ class _AddAssignmentState extends State<AddAssignment> {
 
   void callDatePicker() async {
     var order = await getDate();
-    setState(() {
-      if(pickeddate!=null)
-      pickeddate = order;
-      else
-      pickeddate=DateTime.now();
-    });
+    if (order != null)
+      setState(() {
+        pickeddate = order;
+      });
   }
 
   Future<DateTime> getDate() {
@@ -44,7 +41,6 @@ class _AddAssignmentState extends State<AddAssignment> {
       firstDate: DateTime(2019),
       lastDate: DateTime(2025),
       initialEntryMode: DatePickerEntryMode.calendar,
-     
     );
   }
 
@@ -56,7 +52,7 @@ class _AddAssignmentState extends State<AddAssignment> {
   @override
   void initState() {
     super.initState();
-      this.time = TimeOfDay.now();
+    this.time = TimeOfDay.now();
     this.pickeddate = DateTime.now();
     this._titlecontroller = new TextEditingController();
     this._descriptioncontroller = new TextEditingController();
@@ -77,7 +73,6 @@ class _AddAssignmentState extends State<AddAssignment> {
             this.pickeddate.day,
             this.time.hour,
             this.time.minute);
-    
       });
       addAssignmentToDB(
               _titlecontroller?.text ?? "Untitled",
@@ -157,7 +152,6 @@ class _AddAssignmentState extends State<AddAssignment> {
     );
   }
 
-  
   Widget _deadlineSelector() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
@@ -180,7 +174,6 @@ class _AddAssignmentState extends State<AddAssignment> {
         time = t;
       });
   }
-
 
   Widget _descriptionField(String title,
       {TextEditingController controllervar}) {

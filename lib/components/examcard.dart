@@ -31,7 +31,7 @@ class ExamCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                      'On '+_formatDate(exam.date.toDate()),),
+                      'At '+_formatDate(exam.date.toDate()),),
                   trailing: IconButton(
                     icon: Icon(Icons.arrow_forward_ios),
                     onPressed: () {

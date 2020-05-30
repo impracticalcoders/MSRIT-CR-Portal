@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class IndividualAssignmentPage extends StatefulWidget {
@@ -23,14 +24,78 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
   bool isLoading = false;
   bool showLoading = true;
 
+  String classcode;
+
   @override
   void initState() {
+    _loadClassDetails();
     super.initState();
+  }
+
+  _loadClassDetails() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String _classcode = await pref.get("ClassCode");
+    setState(() {
+      this.classcode = _classcode;
+      this.isLoading = false;
+    });
   }
 
   String _formatDate(DateTime date) {
     final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
     return format.format(date);
+  }
+
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  onPressDelete() {
+    setState(() {
+      this.isLoading = true;
+    });
+    deleteAssignmentfromDB(
+      widget.assignment.AssignmentID,
+      classcode: classcode,
+    ).then((statusCode) {
+      setState(() {
+        this.isLoading = false;
+      });
+      switch (statusCode) {
+        case 1:
+          print('Deleted');
+          Fluttertoast.showToast(
+              msg: "Assignment Deleted",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          Navigator.pop(context);
+          break;
+        case 2:
+          print('check your internet connection');
+          Fluttertoast.showToast(
+              msg: "Check your Internet Connection",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          break;
+        case 3:
+          print('please try again later');
+          Fluttertoast.showToast(
+              msg: "Please try again later",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              textColor: Colors.white,
+              fontSize: 16.0);
+          break;
+      }
+    });
   }
 
   SliverToBoxAdapter _profileCard() {
@@ -147,21 +212,58 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      "${widget.assignment.moreDetailsLink}",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                      textAlign: TextAlign.left,
-                    ),
+                    (widget.assignment.moreDetailsLink != "")
+                        ? ListTile(
+                            title: Text(
+                              "More Details",
+                              
+                              textAlign: TextAlign.left,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              "${widget.assignment.moreDetailsLink}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                              textAlign: TextAlign.left,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.attachment),
+                              onPressed: () =>
+                                  _launchURL(widget.assignment.moreDetailsLink),
+                            ))
+                        : Container(
+                            child: Text("No link attached"),
+                          ),
                     SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      "${widget.assignment.submitLink}",
-                      style:
-                          TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
-                      textAlign: TextAlign.start,
-                    ),
+                    (widget.assignment.submitLink != "")
+                        ? ListTile(
+                            title:Text(
+                              "Submission Link",
+                              textAlign: TextAlign.left,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            subtitle: Text(
+                              "${widget.assignment.submitLink}",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                              textAlign: TextAlign.left,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.attachment),
+                              onPressed: () =>
+                                  _launchURL(widget.assignment.submitLink),
+                            ))
+                        : Container(
+                            child: Text("No link attached"),
+                          ),
                     SizedBox(
                       height: 5,
                     ),
@@ -169,58 +271,6 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                 )),
           )),
     ));
-  }
-
-  _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  onPressDelete() {
-    setState(() {
-      this.isLoading = true;
-    });
-    deleteAssignmentfromDB(
-      widget.assignment.AssignmentID,
-      classcode: widget.classcode,
-    ).then((statusCode) {
-      setState(() {
-        this.isLoading = false;
-      });
-      switch (statusCode) {
-        case 1:
-          print('Deleted');
-          Fluttertoast.showToast(
-              msg: "Assignment Deleted",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          Navigator.pop(context);
-          break;
-        case 2:
-          print('check your internet connection');
-          Fluttertoast.showToast(
-              msg: "Check your Internet Connection",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          break;
-        case 3:
-          print('please try again later');
-          Fluttertoast.showToast(
-              msg: "Please try again later",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-              textColor: Colors.white,
-              fontSize: 16.0);
-          break;
-      }
-    });
   }
 
   @override
@@ -244,7 +294,7 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
                         new MaterialPageRoute(
                             builder: (context) => EditAssignment(
                                   assignment: widget.assignment,
-                                  classcode: widget.classcode,
+                                  classcode: classcode,
                                   assignmentid: widget.assignment.AssignmentID,
                                 )));
                   },

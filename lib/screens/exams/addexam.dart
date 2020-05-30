@@ -27,9 +27,10 @@ class _AddExamState extends State<AddExam> {
 
   void callDatePicker() async {
     var order = await getDate();
+    if(order!=null){
     setState(() {
       pickeddate = order;
-    });
+    });}
   }
 
   Future<DateTime> getDate() {

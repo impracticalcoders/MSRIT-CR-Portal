@@ -2,7 +2,6 @@ import 'package:crportal/components/moreoptions.dart';
 import 'package:crportal/screens/assignments/assignmentsscreen.dart';
 import 'package:crportal/screens/exams/testsscreen.dart';
 import 'package:crportal/screens/notice/noticesscreen.dart';
-import 'package:crportal/services/authservice.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
