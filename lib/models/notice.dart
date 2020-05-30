@@ -8,11 +8,12 @@ class Notice {
   final String moreDetailsLink;
 
   final String title;
-
+  final String id;
   Notice(
     {this.date,
     this.description,
     this.moreDetailsLink,
+    this.id,
     this.title,}
   );
 
@@ -21,7 +22,8 @@ class Notice {
       date:json['date'] as Timestamp,
       description:json['description'],
       title:json['title'],
-      moreDetailsLink: json['moreDetailsLink']
+      moreDetailsLink: json['moreDetailsLink'],
+      id: json['noticeID']
     );
   }
 }

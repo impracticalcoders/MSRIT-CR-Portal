@@ -1,7 +1,8 @@
 import 'package:crportal/screens/assignmentsscreen.dart';
-import 'package:crportal/screens/noticesscreen.dart';
+import 'package:crportal/screens/notice/noticesscreen.dart';
 import 'package:crportal/screens/testsscreen.dart';
 import 'package:crportal/services/authservice.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +15,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMixin {
     TabController _tabController;
+    bool isLoading = true;
     String branch=' ',sem=' ',sec=' ';
     String classcode='NA';
      @override
@@ -33,13 +35,16 @@ class _DashboardState extends State<Dashboard> with SingleTickerProviderStateMix
         this.sem=sem;
         this.sec=sec;
         this.classcode=branch+sem+sec;
+        this.isLoading = false;
       });
   }
   
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading?
+    CupertinoActivityIndicator():
+    Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(branch+' '+sem+' '+sec),

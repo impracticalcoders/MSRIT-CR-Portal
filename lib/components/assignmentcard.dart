@@ -10,7 +10,7 @@ class AssignmentCard extends StatelessWidget {
   
   AssignmentCard(
       {this.assignment,
-      this.classcode = 'NA',
+      this.classcode,
       });
 
    String _formatDate(DateTime date) {
@@ -49,7 +49,7 @@ class AssignmentCard extends StatelessWidget {
                           new MaterialPageRoute(
                               builder: (context) => IndividualAssignmentPage(
                                    assignment: assignment,
-                                   classcode: classcode,
+                                   classcode: classcode??"NA",
                                   )));
                   },
                 )));

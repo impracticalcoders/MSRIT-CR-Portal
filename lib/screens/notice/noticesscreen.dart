@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crportal/components/noticecard.dart';
 import 'package:crportal/models/notice.dart';
-import 'package:crportal/screens/addnotice.dart';
+import 'package:crportal/screens/notice/addnotice.dart';
 import 'package:flutter/material.dart';
 
 class NoticesScreen extends StatefulWidget {
@@ -58,7 +58,7 @@ class _NoticesScreenState extends State<NoticesScreen> {
                     itemBuilder: (context, index) {
                       if (index >= currentNotices.length) return null;
                      
-                        return NoticeCard(notice: currentNotices[index],);
+                        return NoticeCard(notice: currentNotices[index],classcode: widget.classcode,);
                       
                     },
                   );

@@ -1,13 +1,21 @@
 import 'package:crportal/models/notice.dart';
+import 'package:crportal/screens/notice/individualnoticepage.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NoticeCard extends StatelessWidget {
   final Notice notice;
-  
+    final String classcode;
+
   NoticeCard(
       {this.notice,
+      this.classcode,
       });
 
+   String _formatDate(DateTime date) {
+    final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
+    return format.format(date);
+  }
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,32 +29,28 @@ class NoticeCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                      notice.date.toDate().toString(),),
+                      'Dated : '+_formatDate(notice.date.toDate()),),
                   trailing: IconButton(
                     icon: Icon(Icons.arrow_forward_ios),
                     onPressed: () {
-                     /* Navigator.push(
+                       Navigator.push(
                           context,
                           new MaterialPageRoute(
-                              builder: (context) => IndividualOrderPage(
-                                    orderData: order,
-                                    distance: dist,
-                                    user: user,
-                                    orderid: orderid,
-                                  )));*/
+                              builder: (context) => IndividualNoticePage(
+                                   notice: notice,
+                                   classcode: classcode??"NA",
+                                  )));
                     },
                   ),
                   isThreeLine: true,
                   onTap: () {
-                   /* Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                            builder: (context) => IndividualOrderPage(
-                                  orderData: order,
-                                  distance: dist,
-                                  user: user,
-                                  orderid: orderid,
-                                )));*/
+                     Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => IndividualNoticePage(
+                                   notice: notice,
+                                   classcode: classcode??"NA",
+                                  )));
                   },
                 )));
   }
