@@ -21,7 +21,7 @@ class _MoreOptionsState extends State<MoreOptions> {
   
    
     Choice(
-      title: 'About us', 
+      title: 'About', 
       icon: Icons.info,
       onPressed: (context){
           showAboutDialog(context: context);

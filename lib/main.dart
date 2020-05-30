@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
      darkTheme: ThemeData(
           brightness: Brightness.dark, primarySwatch: Colors.deepOrange),
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
         textTheme: TextTheme(
           subtitle2: TextStyle(fontFamily: 'Archia'),
           subtitle1: TextStyle(fontFamily: 'Archia'),
