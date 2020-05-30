@@ -21,7 +21,8 @@ class AssignmentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-            child: Card(
+            child: Hero(tag:assignment.AssignmentID,child:
+            Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0)),
                 child: ListTile(
@@ -52,6 +53,6 @@ class AssignmentCard extends StatelessWidget {
                                    classcode: classcode,
                                   )));
                   },
-                )));
+                ))));
   }
 }

@@ -214,7 +214,9 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Hero(
+      tag: widget.assignment.AssignmentID,
+      child:Scaffold(
         appBar: AppBar(
           title: Text(
             "Assignment Details",
@@ -249,6 +251,6 @@ class _IndividualAssignmentPageState extends State<IndividualAssignmentPage> {
         body: CustomScrollView(
           physics: BouncingScrollPhysics(),
           slivers: <Widget>[_profileCard(), _descriptionCard(), _linksCard()],
-        ));
+        )));
   }
 }

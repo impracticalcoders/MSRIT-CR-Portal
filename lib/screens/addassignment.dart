@@ -5,8 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 class AddAssignment extends StatefulWidget {
- final String classcode;
-  AddAssignment({Key key,this.classcode}) : super(key: key);
+  final String classcode;
+  AddAssignment({Key key, this.classcode}) : super(key: key);
 
   @override
   _AddAssignmentState createState() => _AddAssignmentState();
@@ -58,11 +58,10 @@ class _AddAssignmentState extends State<AddAssignment> {
     this._descriptioncontroller = new TextEditingController();
     this._moredetailslinkcontroller = new TextEditingController();
     this._subjectcodecontroller = new TextEditingController();
-    this._submissionlinkcontroller=new TextEditingController();
+    this._submissionlinkcontroller = new TextEditingController();
   }
 
-
-    onPressRegister() {
+  onPressRegister() {
     if (!_formKey.currentState.validate()) {
     } else {
       setState(() {
@@ -72,10 +71,10 @@ class _AddAssignmentState extends State<AddAssignment> {
               _titlecontroller?.text ?? "Untitled",
               _subjectcodecontroller?.text ?? "NESC",
               _descriptioncontroller?.text ?? "Description",
-              finaldate??DateTime.now(),
+              finaldate ?? DateTime.now(),
               _submissionlinkcontroller?.text ?? "submissionlink",
-              _moredetailslinkcontroller?.text??"more details",
-              widget.classcode??"NA")
+              _moredetailslinkcontroller?.text ?? "more details",
+              widget.classcode ?? "NA")
           .then((statusCode) {
         setState(() {
           this.isLoading = false;
@@ -114,8 +113,8 @@ class _AddAssignmentState extends State<AddAssignment> {
     }
   }
 
-
-  Widget _entryField(String title, {TextEditingController controllervar,bool isRequired=true}) {
+  Widget _entryField(String title,
+      {TextEditingController controllervar, bool isRequired = true}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -130,7 +129,7 @@ class _AddAssignmentState extends State<AddAssignment> {
           ),
           TextFormField(
               validator: (value) {
-                if (isRequired&&value.isEmpty) {
+                if (isRequired && value.isEmpty) {
                   return 'Please fill in this field';
                 }
                 return null;
@@ -146,30 +145,32 @@ class _AddAssignmentState extends State<AddAssignment> {
     );
   }
 
-  Widget _deadlineSelector(){
-   return Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              new RaisedButton(
-                onPressed: callDatePicker,
-                child: new Text(
-                  '${(finaldate == null) ? 'Set Deadline' : 'Change'}',
-                ),
-              ),
-            ],
+  Widget _deadlineSelector() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            'Deadline ${(finaldate == null) ? '' : ' - ${_formatDate(finaldate)} '}',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
-        );
-  } 
-  Widget _descriptionField(String title, {TextEditingController controllervar}) {
+          SizedBox(
+            height: 10,
+          ),
+          new RaisedButton(
+            onPressed: callDatePicker,
+            child: new Text(
+              '${(finaldate == null) ? 'Set Deadline' : 'Change'}',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _descriptionField(String title,
+      {TextEditingController controllervar}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -191,7 +192,6 @@ class _AddAssignmentState extends State<AddAssignment> {
               },
               keyboardType: TextInputType.multiline,
               maxLines: 18,
-              
               controller: controllervar,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -203,20 +203,23 @@ class _AddAssignmentState extends State<AddAssignment> {
   }
 
   Widget _formfieldswidgets() {
-    return Form(key: _formKey,child: 
-    ListView(
-      children: <Widget>[
-        _entryField("Title", controllervar: _titlecontroller),
-        _entryField("Subject Code", controllervar: _subjectcodecontroller,isRequired: false),
-        _deadlineSelector(),
-        _descriptionField("Description", controllervar: _descriptioncontroller),
-        
-        _entryField("Attachments URL",
-            controllervar: _moredetailslinkcontroller,isRequired: false),
-        _entryField("Submission Link",
-            controllervar: _submissionlinkcontroller,isRequired: false),
-      ],
-    physics: BouncingScrollPhysics(),));
+    return Form(
+        key: _formKey,
+        child: ListView(
+          children: <Widget>[
+            _entryField("Title", controllervar: _titlecontroller),
+            _entryField("Subject Code",
+                controllervar: _subjectcodecontroller, isRequired: false),
+            _deadlineSelector(),
+            _descriptionField("Description",
+                controllervar: _descriptioncontroller),
+            _entryField("Attachments URL",
+                controllervar: _moredetailslinkcontroller, isRequired: false),
+            _entryField("Submission Link",
+                controllervar: _submissionlinkcontroller, isRequired: false),
+          ],
+          physics: BouncingScrollPhysics(),
+        ));
   }
 
   @override
@@ -226,13 +229,18 @@ class _AddAssignmentState extends State<AddAssignment> {
         title: Text('New Assignment'),
         actions: <Widget>[
           FlatButton(
-             child: isLoading
-            ? CupertinoActivityIndicator()
-            : Text(
-                'ADD',
-                style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),
-              ),
-            onPressed: () {onPressRegister();},
+            child: isLoading
+                ? CupertinoActivityIndicator()
+                : Text(
+                    'ADD',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
+            onPressed: () {
+              onPressRegister();
+            },
           )
         ],
       ),

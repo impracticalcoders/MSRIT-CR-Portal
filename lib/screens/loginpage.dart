@@ -104,9 +104,12 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Form(
           key: formKey,
-          child: Column(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child:Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              SizedBox(height: 100,),
               Padding(
                   padding: EdgeInsets.symmetric(vertical: 25),
                   child: CircleAvatar(
@@ -242,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
                         }
                       }))
             ],
-          )),
+          ))),
     );
   }
 
