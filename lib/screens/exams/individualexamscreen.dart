@@ -20,23 +20,14 @@ class IndividualExamPage extends StatefulWidget {
 
 class _IndividualExamPageState extends State<IndividualExamPage> {
   bool isLoading = false;
-  bool showLoading = true;
+  bool showLoading = false;
 
-  String classcode = 'NA';
   @override
   void initState() {
     super.initState();
-    _loadClassDetails();
   }
 
-  _loadClassDetails() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String _classcode = await pref.get("ClassCode");
-    setState(() {
-      this.classcode = _classcode;
-      this.isLoading = false;
-    });
-  }
+
 
   String _formatDate(DateTime date) {
     final format = DateFormat.Hm('en_US').add_MMMMEEEEd();
@@ -57,7 +48,7 @@ class _IndividualExamPageState extends State<IndividualExamPage> {
     });
     deleteExamfromDB(
       widget.exam.examID,
-      classcode: classcode,
+      classcode: widget.classcode,
     ).then((statusCode) {
       setState(() {
         this.isLoading = false;
@@ -268,7 +259,7 @@ class _IndividualExamPageState extends State<IndividualExamPage> {
                         new MaterialPageRoute(
                             builder: (context) => EditExam(
                                   exam: widget.exam,
-                                  classcode: classcode,
+                                  classcode: widget.classcode,
                                   examid: widget.exam.examID,
                                 )));
                   },

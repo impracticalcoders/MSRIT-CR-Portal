@@ -10,7 +10,7 @@ class ExamCard extends StatelessWidget {
   
   ExamCard(
       {this.exam,
-      this.classcode = 'NA',
+      this.classcode,
       });
 
    String _formatDate(DateTime date) {
@@ -40,6 +40,8 @@ class ExamCard extends StatelessWidget {
                           new MaterialPageRoute(
                               builder: (context) => IndividualExamPage(
                                    exam: exam,
+                                  classcode: classcode,
+
                                   )));
                     },
                   ),
