@@ -17,7 +17,8 @@ Future<int> addNoticeToDB({String title,String description,DateTime date,String 
     'title':title,
     'description':description,
     'date':date,
-    'noticeID':noticeID
+    'noticeID':noticeID,
+    'moreDetailsLink':moreDetailsLink
   });
   
   await Firestore.instance.collection('classCodes').document(classcode).collection('notices').document(noticeID).setData(noticeDetails).catchError((onError){statusCode =3;});
