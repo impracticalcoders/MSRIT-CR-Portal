@@ -1,3 +1,4 @@
+import 'package:crportal/components/uploadbutton.dart';
 import 'package:crportal/models/exam.dart';
 import 'package:crportal/services/exambloc.dart';
 import 'package:flutter/cupertino.dart';
@@ -259,6 +260,8 @@ TimeOfDay time;
                 controllervar: _descriptioncontroller),
             _entryField("Attachments URL",
                 controllervar: _moredetailslinkcontroller, isRequired: false),
+            UploadButton(attachmentController:_moredetailslinkcontroller)
+
           ],
           physics: BouncingScrollPhysics(),
         ));
