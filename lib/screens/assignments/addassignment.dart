@@ -1,3 +1,4 @@
+import 'package:crportal/components/uploadbutton.dart';
 import 'package:crportal/services/newassignmentbloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -232,6 +233,7 @@ class _AddAssignmentState extends State<AddAssignment> {
                 controllervar: _descriptioncontroller),
             _entryField("Attachments URL",
                 controllervar: _moredetailslinkcontroller, isRequired: false),
+            UploadButton(attachmentController: _moredetailslinkcontroller,),
             _entryField("Submission Link",
                 controllervar: _submissionlinkcontroller, isRequired: false),
           ],

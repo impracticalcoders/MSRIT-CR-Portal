@@ -1,3 +1,4 @@
+import 'package:crportal/components/uploadbutton.dart';
 import 'package:crportal/services/newnotice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -215,8 +216,10 @@ class _AddNoticeState extends State<AddNotice> {
         
         _entryField("Attachments URL",
             controllervar: _moredetailslinkcontroller,isRequired: false),
+        
         // _entryField("Submission Link",
             // controllervar: _submissionlinkcontroller,isRequired: false),
+        UploadButton(attachmentController: _moredetailslinkcontroller,)
       ],
     physics: BouncingScrollPhysics(),));
   }

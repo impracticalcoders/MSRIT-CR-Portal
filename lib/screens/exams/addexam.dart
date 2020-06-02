@@ -1,3 +1,4 @@
+import 'package:crportal/components/uploadbutton.dart';
 import 'package:crportal/services/exambloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -232,6 +233,7 @@ class _AddExamState extends State<AddExam> {
                 controllervar: _descriptioncontroller),
             _entryField("Attachments URL",
                 controllervar: _moredetailslinkcontroller, isRequired: false),
+            UploadButton(attachmentController:_moredetailslinkcontroller)
           ],
           physics: BouncingScrollPhysics(),
         ));
